@@ -4,6 +4,7 @@ import it.nave.dto.DummyDto;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.configuration.support.DefaultBatchConfiguration;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -12,10 +13,14 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.support.ConfigurableConversionService;
 import org.springframework.transaction.PlatformTransactionManager;
 
+@Profile("without-converter")
 @Configuration
-public class BatchConfig {
+public class BatchConfigWithoutConverter {
     @Bean
     @StepScope
     public IdentityReader itemReader(@Value("#{jobParameters['dummy-dto']}") DummyDto dummyDto) {
@@ -46,7 +51,7 @@ public class BatchConfig {
                 .build();
     }
 
-    private static class IdentityReader implements ItemReader<DummyDto> {
+    public static class IdentityReader implements ItemReader<DummyDto> {
         private final DummyDto dummyDto;
 
         public IdentityReader(DummyDto dummyDto) {
