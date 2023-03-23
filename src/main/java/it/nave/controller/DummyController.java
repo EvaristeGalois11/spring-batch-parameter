@@ -20,9 +20,9 @@ public class DummyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void dummyJob(@RequestBody DummyDto dummy) throws Exception {
+    public void dummyJob(@RequestBody DummyDto dummyDto) throws Exception {
         jobLauncher.run(job, new JobParametersBuilder()
-                .addJobParameter("dummy-dto", dummy, DummyDto.class)
+                .addJobParameter("dummy-dto", dummyDto, DummyDto.class)
                 .toJobParameters());
     }
 }
