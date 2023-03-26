@@ -47,7 +47,7 @@ public class BatchConfig {
     }
 
     public static class IdentityReader implements ItemReader<DummyDto> {
-        private final DummyDto dummyDto;
+        private DummyDto dummyDto;
 
         public IdentityReader(DummyDto dummyDto) {
             this.dummyDto = dummyDto;
@@ -55,7 +55,9 @@ public class BatchConfig {
 
         @Override
         public DummyDto read() {
-            return dummyDto;
+            var buffer = dummyDto;
+            dummyDto = null;
+            return buffer;
         }
     }
 }
