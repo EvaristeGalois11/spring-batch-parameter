@@ -11,6 +11,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.batch.BatchConversionServiceCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -20,12 +21,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Profile("add-converter")
 @Configuration
-public class BatchConfigWithConverter extends DefaultBatchConfiguration {
-    @Override
-    protected ConfigurableConversionService getConversionService() {
-        var conversionService = super.getConversionService();
-        conversionService.addConverter(new DummyDtoToStringConverter());
-        return conversionService;
+public class BatchConfigWithConverter {
+    @Bean
+    protected BatchConversionServiceCustomizer batchConversionServiceCustomizer() {
+        return configurableConversionService -> configurableConversionService.addConverter(new DummyDtoToStringConverter());
     }
 
     public static class DummyDtoToStringConverter implements Converter<DummyDto, String> {
